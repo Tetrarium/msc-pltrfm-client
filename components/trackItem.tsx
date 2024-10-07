@@ -1,17 +1,41 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, { MouseEventHandler, useEffect, useState } from "react";
 
+import { useActions } from "@/hooks/useActions";
+import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { ITrack } from "@/types/track";
 import { Delete, Pause, PlayArrow } from "@mui/icons-material";
 import { Box, Card, Grid2, IconButton } from "@mui/material";
 
 interface TrackItemProps {
   track: ITrack;
-  active?: boolean;
+  // active?: boolean;
 }
 
-const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
+const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
   const router = useRouter();
+  const { pauseTrack, playTrack, setActiveTrack } = useActions();
+  const { active, pause } = useTypedSelector(state => state.player);
+  const [isPlay, setIsPlay] = useState(false);
+
+  useEffect(() => {
+    setIsPlay(track === active && !pause);
+  }, [active, pause]);
+
+  const handlePlay: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.stopPropagation();
+
+    if (!active) {
+      setActiveTrack(track);
+      return;
+    }
+
+    if (pause) {
+      playTrack();
+    } else {
+      pauseTrack();
+    }
+  };
 
   return (
     <Card
@@ -25,10 +49,11 @@ const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
       onClick={() => router.push('/tracks/' + track._id)}
     >
       <IconButton
-        onClick={(e) => e.stopPropagation()}
+        onClick={handlePlay}
         sx={{ mr: 2 }}
+        type="button"
       >
-        {active
+        {isPlay
           ? <Pause />
           : <PlayArrow />
         }

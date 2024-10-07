@@ -19,5 +19,9 @@ export const setVolume = (payload: number): PlayerAction => {
 
 export const setActiveTrack = (payload: ITrack): PlayerAction => {
   return { type: PlayerActionTypes.SET_ACTIVE, payload };
+};
+
+export const setCurrentTime = (payload: number): PlayerAction => {
+  return { type: PlayerActionTypes.SET_CURRENT_TIME, payload };
 }
 
