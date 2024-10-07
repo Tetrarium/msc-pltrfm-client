@@ -2,6 +2,10 @@ import "./global.sass";
 
 import { AppProps } from "next/app";
 
-export default function App({ Component, pageProps }: AppProps) {
+import { wrapper } from "@/store";
+
+function App({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />;
 };
+
+export default wrapper.withRedux(App);
