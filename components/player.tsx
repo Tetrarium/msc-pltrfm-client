@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect } from "react";
 
+import { CONSTS } from "@/consts";
 import { useActions } from "@/hooks/useActions";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { ITrack } from "@/types/track";
@@ -12,16 +13,16 @@ import TrackProgress from "./trackProgress";
 let audio: HTMLAudioElement;
 
 const Player = () => {
-  const track: ITrack = {
-    _id: '67014f59e3f0bcce57bfbaa5',
-    name: 'Track 1',
-    artist: 'Artist 1',
-    audio: 'http://localhost:5000/audio/0df3504b-80f9-482b-949a-003b3eac69f3.mp3',
-    pictire: 'http://localhost:5000/image/1d0c2097-c0a1-4cf7-b707-6d03dfff2562.png',
-    listens: 0,
-    comments: [],
-    text: 'text1'
-  };
+  // const track: ITrack = {
+  //   _id: '67014f59e3f0bcce57bfbaa5',
+  //   name: 'Track 1',
+  //   artist: 'Artist 1',
+  //   audio: 'http://localhost:5000/audio/0df3504b-80f9-482b-949a-003b3eac69f3.mp3',
+  //   pictire: 'http://localhost:5000/image/1d0c2097-c0a1-4cf7-b707-6d03dfff2562.png',
+  //   listens: 0,
+  //   comments: [],
+  //   text: 'text1'
+  // };
   const { active, pause, volume, duration, currentTime } = useTypedSelector(state => state.player);
   const { pauseTrack, playTrack, setDuration, setVolume, setCurrentTime } = useActions();
 
@@ -30,7 +31,8 @@ const Player = () => {
       audio = new Audio();
     } else {
       setAudio();
-      handlePlay();
+      // handlePlay();
+      audio.play();
     }
 
     // return () => {
@@ -49,7 +51,7 @@ const Player = () => {
 
   const setAudio = () => {
     if (active) {
-      audio.src = active.audio;
+      audio.src = CONSTS.URL_TRACKS + active.audio;
       audio.volume = volume / 100;
       audio.onloadeddata = () => {
         setDuration(Math.ceil(audio.duration));

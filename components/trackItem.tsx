@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import React, { MouseEventHandler, useEffect, useState } from "react";
 
+import { CONSTS } from "@/consts";
 import { useActions } from "@/hooks/useActions";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { ITrack } from "@/types/track";
@@ -25,7 +26,7 @@ const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
   const handlePlay: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
 
-    if (!active) {
+    if (!active || (active && active !== track)) {
       setActiveTrack(track);
       return;
     }
@@ -58,7 +59,7 @@ const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
           : <PlayArrow />
         }
       </IconButton>
-      <img width={70} height={70} src={track.pictire} />
+      <img width={70} height={70} src={CONSTS.URL_TRACKS + track.picture} />
       <Grid2
         container
         direction={"column"}

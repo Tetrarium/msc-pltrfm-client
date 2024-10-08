@@ -3,10 +3,13 @@ import { AnyAction, combineReducers } from "redux";
 
 import { PlayerAction } from "@/types/player";
 
+import { RootState } from "../";
 import { playerReducer } from "./playerReducer";
+import { trackReducer } from "./trackReducer";
 
 export const rootReducer = combineReducers({
   player: playerReducer,
+  track: trackReducer,
 });
 
 const reducer = (state: RootState, action: AnyAction | PlayerAction) => {
@@ -21,5 +24,3 @@ const reducer = (state: RootState, action: AnyAction | PlayerAction) => {
     return rootReducer(state, action as PlayerAction);
   }
 };
-
-export type RootState = ReturnType<typeof rootReducer>;
