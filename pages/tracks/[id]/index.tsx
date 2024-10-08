@@ -1,27 +1,38 @@
+import axios from "axios";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 
+import { CONSTS } from "@/consts";
+import { useInput } from "@/hooks/useInput";
 import MainLayout from "@/layouts/mainLayout";
 import { ITrack } from "@/types/track";
 import { Box, Button, Card, Divider, Grid2, TextField, Typography } from "@mui/material";
 
-const Index = () => {
-  const track: ITrack = {
-    _id: '67014f59e3f0bcce57bfbaa5',
-    name: 'Track 1',
-    artist: 'Artist 1',
-    audio: 'http://localhost:5000/audio/0df3504b-80f9-482b-949a-003b3eac69f3.mp3',
-    pictire: 'http://localhost:5000/image/1d0c2097-c0a1-4cf7-b707-6d03dfff2562.png',
-    listens: 0,
-    comments: [
-      { _id: '1', username: 'User1', text: 'comment1', trackId: '67014f59e3f0bcce57bfbaa5' },
-      { _id: '2', username: 'User2', text: 'comment2', trackId: '67014f59e3f0bcce57bfbaa5' },
-      { _id: '3', username: 'User3', text: 'comment3', trackId: '67014f59e3f0bcce57bfbaa5' },
-    ],
-    text: 'text1'
-  };
+interface TrackProps {
+  serverTrack: ITrack;
+}
 
+const Index = ({ serverTrack }: TrackProps) => {
+  const [track, setTrack] = useState<ITrack>(serverTrack);
   const router = useRouter();
+  const username = useInput('');
+  const comment = useInput('');
+
+  const addComment = async () => {
+    try {
+      const response = await axios.post(CONSTS.URL_TRACKS + 'tracks/comment', {
+        username: username.value,
+        text: comment.value,
+        trackId: track._id,
+      });
+      setTrack({ ...track, comments: [...track.comments, response.data] });
+      // username.clear();
+      comment.clear();
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <MainLayout>
@@ -34,7 +45,7 @@ const Index = () => {
       >К списку треков</Button>
       <Card sx={{ my: 3, p: 2 }}>
         <Grid2 container>
-          <img src={track.pictire} alt="" width={200} height={200} />
+          <img src={CONSTS.URL_TRACKS + track.picture} alt="" width={200} height={200} />
           <Box sx={{ ml: 2 }}>
             <Typography variant="h3">Название трека - {track.name}</Typography>
             <Typography variant="h4">Исполнитель - {track.artist}</Typography>
@@ -50,15 +61,17 @@ const Index = () => {
           <Grid2 container gap={2}>
             <TextField
               label="Ваше имя"
+              {...username}
               fullWidth
             />
             <TextField
               label="Комментарий"
+              {...comment}
               fullWidth
               multiline
               rows={4}
             />
-            <Button variant="outlined">Отправить</Button>
+            <Button variant="outlined" onClick={addComment}>Отправить</Button>
           </Grid2>
           <Box>
             {track.comments.map(comment => (
@@ -82,3 +95,13 @@ const Index = () => {
 };
 
 export default Index;
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const response = await axios.get(CONSTS.URL_TRACKS + 'tracks/' + params?.id);
+
+  return {
+    props: {
+      serverTrack: response.data,
+    }
+  };
+};

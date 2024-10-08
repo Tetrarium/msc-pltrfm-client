@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { Box, Button } from "@mui/material";
 
 interface FileUploadProps {
-  setFile: Dispatch<SetStateAction<File | null>>;
+  setFile: Dispatch<SetStateAction<File>>;
   accept: string;
 }
 

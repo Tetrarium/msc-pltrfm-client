@@ -1,8 +1,12 @@
+import axios from "axios";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 import FileUpload from "@/components/forms/fileUpload";
 import TrackDescriptionForm from "@/components/forms/trackDescriptionForm";
 import StepWrapper from "@/components/stepWrapper";
+import { CONSTS } from "@/consts";
+import { useInput } from "@/hooks/useInput";
 import MainLayout from "@/layouts/mainLayout";
 import { Button, Grid2, Typography } from "@mui/material";
 
@@ -11,8 +15,13 @@ const MAX_STEP = 2;
 
 const Create = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [picture, setPicture] = useState<File | null>(null);
-  const [audio, setAudio] = useState<File | null>(null);
+  const [picture, setPicture] = useState<File>(null as unknown as File);
+  const [audio, setAudio] = useState<File>(null as unknown as File);
+  const router = useRouter();
+
+  const name = useInput('');
+  const artist = useInput('');
+  const text = useInput('');
 
   const back = () => {
     if (activeStep > MIN_STEP) {
@@ -21,8 +30,21 @@ const Create = () => {
   };
 
   const next = () => {
-    if (activeStep <= MAX_STEP) {
+    if (activeStep < MAX_STEP) {
+      console.log('set active step');
       setActiveStep(prev => prev + 1);
+    } else {
+      const formData = new FormData();
+      formData.append('name', name.value);
+      formData.append('artist', artist.value);
+      formData.append('text', text.value);
+      formData.append('picture', picture);
+      formData.append('audio', audio);
+
+      axios.post(CONSTS.URL_TRACKS + 'tracks', formData)
+        .then(() => router.push('/tracks'))
+        .catch(e => console.log(e));
+      console.log('post track');
     }
   };
 
@@ -31,7 +53,7 @@ const Create = () => {
       <Typography variant="h3" mb={3}>Загрузка трека</Typography>
       <StepWrapper activeStep={activeStep}>
         {activeStep === 0 &&
-          <TrackDescriptionForm />
+          <TrackDescriptionForm {...{ name, artist, text }} />
         }
         {activeStep === 1 &&
           <FileUpload setFile={setPicture} accept="image/*">
