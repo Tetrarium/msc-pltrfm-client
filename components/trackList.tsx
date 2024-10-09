@@ -12,7 +12,7 @@ interface TrackListProps {
 const TrackList: React.FC<TrackListProps> = ({ tracks }) => {
   return (
     <Grid2 container direction={'column'}>
-      <Box p={2}>
+      <Box>
         {tracks.map(track => (
           <TrackItem
             key={track._id}

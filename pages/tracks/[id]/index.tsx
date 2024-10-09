@@ -35,7 +35,11 @@ const Index = ({ serverTrack }: TrackProps) => {
   };
 
   return (
-    <MainLayout>
+    <MainLayout
+      title={"Музыкальная платформа - " + track.name + " - " + track.artist}
+      description={track.name + ' - ' + track.artist}
+      keywords={"Музыка, Треки, Исполнители, " + track.artist + ", " + track.name}
+    >
       <Button
         variant="outlined"
         onClick={() => router.push('/tracks')}
