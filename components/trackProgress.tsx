@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 
 import { Box } from "@mui/material";
 
@@ -6,7 +6,7 @@ interface TrackProgressProps {
   left: number;
   right: number;
   value: number;
-  onChange: (e: any) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const TrackProgress: React.FC<TrackProgressProps> = ({ left, right, value, onChange }) => {

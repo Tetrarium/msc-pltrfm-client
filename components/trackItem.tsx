@@ -59,7 +59,7 @@ const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
           : <PlayArrow />
         }
       </IconButton>
-      <img width={70} height={70} src={CONSTS.URL_TRACKS + track.picture} />
+      <img width={70} height={70} src={CONSTS.URL_TRACKS + track.picture} alt="" />
       <Grid2
         container
         direction={"column"}
