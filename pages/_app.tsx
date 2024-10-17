@@ -4,7 +4,7 @@ import { AppProps } from "next/app";
 
 import { wrapper } from "@/store";
 
-import { Providers } from "./provider";
+import Providers from "./provider";
 
 function App({ Component, pageProps }: AppProps) {
   return (
