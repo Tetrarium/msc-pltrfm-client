@@ -13,16 +13,6 @@ import TrackProgress from "./trackProgress";
 let audio: HTMLAudioElement;
 
 const Player = () => {
-  // const track: ITrack = {
-  //   _id: '67014f59e3f0bcce57bfbaa5',
-  //   name: 'Track 1',
-  //   artist: 'Artist 1',
-  //   audio: 'http://localhost:5000/audio/0df3504b-80f9-482b-949a-003b3eac69f3.mp3',
-  //   pictire: 'http://localhost:5000/image/1d0c2097-c0a1-4cf7-b707-6d03dfff2562.png',
-  //   listens: 0,
-  //   comments: [],
-  //   text: 'text1'
-  // };
   const { active, pause, volume, duration, currentTime } = useTypedSelector(state => state.player);
   const { pauseTrack, playTrack, setDuration, setVolume, setCurrentTime } = useActions();
 
@@ -31,14 +21,9 @@ const Player = () => {
       audio = new Audio();
     } else {
       setAudio();
-      // handlePlay();
       audio.play();
     }
 
-    // return () => {
-    //   audio.removeEventListener('loadeddata', handleLoadedData);
-    //   audio.removeEventListener('timeupdate', handleTimeUpdate);
-    // };
   }, [active]);
 
   useEffect(() => {
@@ -61,18 +46,8 @@ const Player = () => {
         setCurrentTime(Math.ceil(audio.currentTime));
       };
 
-      // audio.addEventListener('loadeddata', handleLoadedData);
-      // audio.addEventListener('timeupdate', handleTimeUpdate);
     }
   };
-
-  // const handleLoadedData = () => {
-  //   setDuration(Math.ceil(audio.duration));
-  // };
-
-  // const handleTimeUpdate = () => {
-  //   setCurrentTime(Math.ceil(audio.currentTime));
-  // };
 
   const handlePlay = () => {
     console.log(pause);
